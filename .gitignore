@@ -3,3 +3,6 @@ package-lock.json
 *.code-workspace
 /Заметки
 /.vscode
+/src/scripts/config.js
+build/scripts/main.js
+/build
