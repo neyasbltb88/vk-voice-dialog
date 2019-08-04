@@ -4,5 +4,4 @@ package-lock.json
 /Заметки
 /.vscode
 /src/scripts/config.js
-build/scripts/main.js
 /build
