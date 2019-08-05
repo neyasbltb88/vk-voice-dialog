@@ -11,7 +11,7 @@ export default class WitSpeachApi {
         this.XHR = new Xhr();
         this.init();
     }
-    getTextByAudio = async (audioUrl = this.audioUrl) => {
+    getTextByAudio = async(audioUrl = this.audioUrl) => {
 
         const response = await fetch(audioUrl);
         const content = await response.blob();
@@ -27,10 +27,10 @@ export default class WitSpeachApi {
             },
             method: 'POST',
         })
-        
+
         console.log(JSON.parse(text.target.response));
     }
-    init = async () => {
+    init = async() => {
         await this.getTextByAudio();
     }
 }
