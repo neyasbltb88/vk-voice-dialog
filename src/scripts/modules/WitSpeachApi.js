@@ -13,8 +13,11 @@ export default class WitSpeachApi {
     }
     getTextByAudio = async(audioUrl = this.audioUrl) => {
 
+        console.time('Скачивание голосового файла');
+        console.timeLog('Скачивание голосового файла');
         const response = await fetch(audioUrl);
         const content = await response.blob();
+        console.timeEnd('Скачивание голосового файла');
 
         const data = new FormData();
         data.append('body', content);
