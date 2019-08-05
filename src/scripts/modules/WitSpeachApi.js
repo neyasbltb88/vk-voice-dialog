@@ -4,24 +4,26 @@ import Xhr from './xhr';
 
 export default class WitSpeachApi {
 
-    uri = `https://api.wit.ai/speech`;
+    apiUri = `https://api.wit.ai/speech`;
 
-    constructor(url) {
-        this.audioUrl = url;
+    constructor() {
         this.XHR = new Xhr();
-        this.init();
     }
-    getTextByAudio = async(audioUrl = this.audioUrl) => {
+
+    getBlobAudio = async (audioUrl) => {
+        const response = await fetch(audioUrl);
+        return response.blob();
+    }
+    getTextByAudio = async (audioUrl) => {
 
         console.time('Скачивание голосового файла');
         console.timeLog('Скачивание голосового файла');
-        const response = await fetch(audioUrl);
-        const content = await response.blob();
+        const audio = await this.getBlobAudio(audioUrl);
         console.timeEnd('Скачивание голосового файла');
 
         const data = new FormData();
-        data.append('body', content);
-        let text = await this.XHR.request(this.uri, {
+        data.append('body', audio);
+        let text = await this.XHR.request(this.apiUri, {
             body: data,
             headers: {
                 'Accept': 'audio/x-mpeg-3',
@@ -32,8 +34,5 @@ export default class WitSpeachApi {
         })
 
         console.log(JSON.parse(text.target.response));
-    }
-    init = async() => {
-        await this.getTextByAudio();
     }
 }
