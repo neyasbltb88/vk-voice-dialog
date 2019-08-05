@@ -3,6 +3,8 @@ import Xhr from './xhr';
 import NavWatcher from './nav-watcher';
 import TaskLauncher from './task-launcher';
 import WitSpeachApi from './WitSpeachApi';
+import SStorage from './SStorage';
+import Utils from './Utils';
 
 export default class TestClass {
     constructor() {
