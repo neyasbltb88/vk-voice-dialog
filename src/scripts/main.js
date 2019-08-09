@@ -9,8 +9,8 @@ window.testClass = new TestClass();
 // witSpeachApi.getTextByAudio('https://psv4.userapi.com/c853024//u281890215/audiomsg/d12/568a46c30c.mp3');
 
 import MessagesWatcher from './modules/MessagesWatcher';
-window.messagesWatcher = new MessagesWatcher();
 const callback = (element) => {
     console.log(element.textContent);
 }
-messagesWatcher.watcher(document.querySelector('.im-page-chat-contain'), callback);
+window.messagesWatcher = new MessagesWatcher(document.querySelector('.im-page-chat-contain'), callback);
+messagesWatcher.watcher();
