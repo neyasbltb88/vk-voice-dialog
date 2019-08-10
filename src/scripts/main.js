@@ -10,7 +10,7 @@ window.testClass = new TestClass();
 
 import MessagesWatcher from './modules/MessagesWatcher';
 const callback = (element) => {
-    console.log(element.textContent);
+    console.log(element);
 }
 window.messagesWatcher = new MessagesWatcher(document.querySelector('.im-page-chat-contain'), callback);
-messagesWatcher.watcher();
+messagesWatcher.init();
