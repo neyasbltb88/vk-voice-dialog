@@ -8,12 +8,10 @@ import Utils from './Utils';
 
 export default class TestClass {
     constructor() {
-        console.log('%c%s', (window.log_color) ? window.log_color.blue : '', 'TestClass');
+        console.log('%c%s', window.log_color ? window.log_color.blue : '', 'TestClass');
 
         this.test();
     }
 
-    test() {
-
-    }
+    test() {}
 }
