@@ -17,7 +17,7 @@ export default class TaskLauncher {
         this.add(tasks);
     }
 
-    add = (tasks) => {
+    add = tasks => {
         let newTasks = [];
         let added = false;
         if (tasks instanceof Array) {
@@ -30,11 +30,11 @@ export default class TaskLauncher {
         newTasks.forEach(task => {
             // Валидация таска
             if (!task.condition || typeof task.condition !== 'function') {
-                console.warn('Laucher: не передано условие', task);
+                console.warn('Launcher: не передано условие', task);
                 return;
             }
             if (!task.callback || typeof task.callback !== 'function') {
-                console.warn('Laucher: не передан коллбек', task);
+                console.warn('Launcher: не передан коллбек', task);
                 return;
             }
 
@@ -59,13 +59,13 @@ export default class TaskLauncher {
         this._launch();
 
         return added;
-    }
+    };
 
     hasActive = () => {
         return this.tasks.some(task => task.run);
-    }
+    };
 
-    _launch = (rafId) => {
+    _launch = rafId => {
         // Если не рекурсивный запуск и уже запущен процесс проверки тасков, или нет активных, то выходим
         if (this.rafId !== rafId && (this.running || !this.hasActive())) return;
         this.running = true;
@@ -74,7 +74,7 @@ export default class TaskLauncher {
             // Если таск не активный, то выходим
             if (!task.run) return;
 
-            // Если функция условия таска вернула true, отключаем дальнейшее выполнение таска и выззываем callback
+            // Если функция условия таска вернула true, отключаем дальнейшее выполнение таска и вызываем callback
             if (task.condition.call(this)) {
                 this.stop(index);
 
@@ -101,8 +101,7 @@ export default class TaskLauncher {
         } else {
             this.stop();
         }
-
-    }
+    };
 
     findIndex(taskId) {
         let index;
@@ -116,7 +115,7 @@ export default class TaskLauncher {
                 if (task.name === taskId) index = ind;
             });
 
-            index = (index === undefined) ? false : index;
+            index = index === undefined ? false : index;
         } else {
             return false;
         }
@@ -135,18 +134,18 @@ export default class TaskLauncher {
         let index = this.findIndex(taskId);
         if (index === false) return false;
 
-        // Если нет аргумениа и таск уже запущен, возвращаем false
+        // Если нет аргумента и таск уже запущен, возвращаем false
         if (!arg && this.tasks[index].run) return false;
 
         // Запускаем таск
         this.tasks[index].run = true;
-        // Отмечаем что таск не вполнен
+        // Отмечаем что таск не выполнен
         this.tasks[index].complete = null;
         // Если есть аргумент, обновим его в таске
         if (arg) this.tasks[index].arg = arg;
 
         return index;
-    }
+    };
 
     // Запуск рекурсивной проверки условий тасков
     run = (...args) => {
@@ -173,7 +172,7 @@ export default class TaskLauncher {
         this._launch();
 
         return runs;
-    }
+    };
 
     _stopTask(taskId) {
         let index = this.findIndex(taskId);
@@ -189,18 +188,18 @@ export default class TaskLauncher {
     }
 
     // Остановка рекурсивной проверки условия
-    stop = (taskId) => {
-        let stoped;
+    stop = taskId => {
+        let stopped;
         if (taskId !== undefined) {
             let index = this._stopTask(taskId);
             if (index === false) return false;
 
-            stoped = index;
+            stopped = index;
         } else {
-            stoped = [];
+            stopped = [];
             this.tasks.forEach((task, idx) => {
                 this._stopTask(idx);
-                stoped.push(idx);
+                stopped.push(idx);
             });
 
             this.running = false;
@@ -208,8 +207,8 @@ export default class TaskLauncher {
             this.rafId = 0;
         }
 
-        return stoped;
-    }
+        return stopped;
+    };
 
     _removeTask(taskId) {
         let index = this.findIndex(taskId);
@@ -220,7 +219,7 @@ export default class TaskLauncher {
         return index;
     }
 
-    remove = (taskId) => {
+    remove = taskId => {
         let removed;
         if (taskId !== undefined) {
             let index = this._removeTask(taskId);
@@ -237,7 +236,5 @@ export default class TaskLauncher {
         }
 
         return removed;
-    }
+    };
 }
-
-// window.TaskLauncher = TaskLauncher;

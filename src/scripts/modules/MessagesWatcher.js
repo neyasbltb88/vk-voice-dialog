@@ -28,8 +28,7 @@ export default class MessagesWatcher {
                     if (mutation.addedNodes.length !== 0) {
                         const lastChild = mutation.addedNodes[0];
                         const message = lastChild.querySelector('.im-mess');
-                        const id = /^\d+$/m.test(message.dataset.msgid);
-                        if (id == true) {
+                        if (message && /^\d+$/m.test(message.dataset.msgid)) {
                             const newTimeMessage = +message.dataset.ts;
                             if (this.timeMessage == 0) {
                                 this.timeMessage = newTimeMessage;
@@ -77,11 +76,13 @@ export default class MessagesWatcher {
     };
 
     destroy = () => {
-        this.isInit = false;
-        console.log('%c%s', window.log_color ? window.log_color.blue : '', 'MessagesWatcher:destroy');
+        if (!this.isInit) return;
 
+        this.isInit = false;
         this.externalObserver.disconnect();
         this.interiorObserver.disconnect();
         this.timeMessage = 0;
+
+        console.log('%c%s', window.log_color ? window.log_color.blue : '', 'MessagesWatcher:destroy');
     };
 }

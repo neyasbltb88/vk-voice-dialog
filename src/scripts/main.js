@@ -13,4 +13,8 @@ if (window.top === window) {
 
 if (module.hot) {
     module.hot.accept();
+
+    module.hot.dispose(() => {
+        window.voiceDialog.destroy();
+    });
 }

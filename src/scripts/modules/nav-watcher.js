@@ -8,22 +8,25 @@ export default class NavWatcher extends EventEmitter {
         this.was_init = false;
         this.originalNavSetLoc = null;
         this.lastNav = null;
-
-        this.init();
     }
 
     navSetLocDecorator = (...args) => {
-        let res_return = this.originalNavSetLoc.call(window.nav, ...args);
         this.emit('setloc', args);
+        let res_return = this.originalNavSetLoc.call(window.nav, ...args);
 
-        // Чтобы не было дублирующихся срабатываний при установке одной и той же локации несколько раз подряд
-        if (this.lastNav !== JSON.stringify(window.nav.objLoc)) {
-            this.lastNav = JSON.stringify(window.nav.objLoc);
-            this.emit('location', { ...window.nav.objLoc });
-        }
+        this.emitLocation();
 
         return res_return;
     };
+
+    emitLocation() {
+        // Чтобы не было дублирующихся срабатываний при установке одной и той же локации несколько раз подряд
+        if (this.lastNav !== JSON.stringify(window.nav.objLoc)) {
+            // Запоминаем текущую локацию
+            this.lastNav = JSON.stringify(window.nav.objLoc);
+            this.emit('location', { ...window.nav.objLoc });
+        }
+    }
 
     init() {
         if (window.nav && window.nav.setLoc && !this.was_init) {
@@ -31,10 +34,9 @@ export default class NavWatcher extends EventEmitter {
             this.originalNavSetLoc = window.nav.setLoc;
             window.nav.setLoc = this.navSetLocDecorator;
 
-            // Запоминаем текущую локацию
-            this.lastNav = JSON.stringify(window.nav.objLoc);
             this.was_init = true;
             this.emit('init', this);
+            this.emitLocation();
         } else {
             requestAnimationFrame(() => this.init());
         }
